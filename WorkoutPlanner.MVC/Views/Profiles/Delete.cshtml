@@ -1,4 +1,5 @@
-@model WorkoutPlanner.MVC.Models.Profile
+@using WorkoutPlanner.Data.Entities
+@model WorkoutPlanner.Data.Entities.Profile
 
 @{
     ViewData["Title"] = "Delete";
@@ -12,12 +13,6 @@
     <hr />
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="Id" />
-        <dt>
-            @Html.DisplayNameFor(model => model.ApplicationUserId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ApplicationUserId)
-        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>

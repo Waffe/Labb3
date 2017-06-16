@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace WorkoutPlanner.MVC.Migrations
+namespace WorkoutPlanner.Data.Migrations
 {
-    public partial class IHadToImSorry : Migration
+    public partial class MovedDomainToDataLayer : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,6 @@ namespace WorkoutPlanner.MVC.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ApplicationUserId = table.Column<string>(nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
                     Lenght = table.Column<double>(nullable: true),
                     Name = table.Column<string>(nullable: true),
@@ -27,19 +26,47 @@ namespace WorkoutPlanner.MVC.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Exercises",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Instructions = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    ProfileId = table.Column<int>(nullable: true),
+                    Video = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Exercises", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Exercises_Profiles_ProfileId",
+                        column: x => x.ProfileId,
+                        principalTable: "Profiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Programs",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AuthorId = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Difficulty = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    ProfileId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Programs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Programs_Profiles_ProfileId",
+                        column: x => x.ProfileId,
+                        principalTable: "Profiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,11 +75,18 @@ namespace WorkoutPlanner.MVC.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ApplicationUserId = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    ProfileId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Workouts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Workouts_Profiles_ProfileId",
+                        column: x => x.ProfileId,
+                        principalTable: "Profiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,15 +95,21 @@ namespace WorkoutPlanner.MVC.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AuthorId = table.Column<string>(nullable: false),
                     Comment = table.Column<string>(nullable: true),
+                    ProfileId = table.Column<int>(nullable: false),
                     ProgramId = table.Column<int>(nullable: false),
                     Rate = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProgramRatings", x => x.Id);
-                    table.UniqueConstraint("U_ProgramRating_ProgAuthor", x => new { x.AuthorId, x.ProgramId });
+                    table.UniqueConstraint("U_ProgramRating_ProgAuthor", x => new { x.ProfileId, x.ProgramId });
+                    table.ForeignKey(
+                        name: "FK_ProgramRatings_Profiles_ProfileId",
+                        column: x => x.ProfileId,
+                        principalTable: "Profiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProgramRatings_Programs_ProgramId",
                         column: x => x.ProgramId,
@@ -79,26 +119,27 @@ namespace WorkoutPlanner.MVC.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Exercises",
+                name: "WorkoutExercises",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ApplicationUserId = table.Column<string>(nullable: true),
-                    Instructions = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: false),
-                    Video = table.Column<string>(nullable: true),
-                    WorkoutId = table.Column<int>(nullable: true)
+                    ExerciseId = table.Column<int>(nullable: false),
+                    WorkoutId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Exercises", x => x.Id);
+                    table.PrimaryKey("PK_WorkoutExercises", x => new { x.ExerciseId, x.WorkoutId });
                     table.ForeignKey(
-                        name: "FK_Exercises_Workouts_WorkoutId",
+                        name: "FK_WorkoutExercises_Exercises_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Exercises",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WorkoutExercises_Workouts_WorkoutId",
                         column: x => x.WorkoutId,
                         principalTable: "Workouts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -138,41 +179,22 @@ namespace WorkoutPlanner.MVC.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AuthorId = table.Column<string>(nullable: false),
                     Comment = table.Column<string>(nullable: true),
+                    ProfileId = table.Column<int>(nullable: true),
                     Rate = table.Column<int>(nullable: false),
                     WorkoutId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WorkoutRatings", x => x.Id);
-                    table.UniqueConstraint("U_WorkoutRating_WorkAuthor", x => new { x.AuthorId, x.WorkoutId });
+                    table.ForeignKey(
+                        name: "FK_WorkoutRatings_Profiles_ProfileId",
+                        column: x => x.ProfileId,
+                        principalTable: "Profiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_WorkoutRatings_Workouts_WorkoutId",
-                        column: x => x.WorkoutId,
-                        principalTable: "Workouts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WorkoutExercises",
-                columns: table => new
-                {
-                    ExerciseId = table.Column<int>(nullable: false),
-                    WorkoutId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WorkoutExercises", x => new { x.ExerciseId, x.WorkoutId });
-                    table.ForeignKey(
-                        name: "FK_WorkoutExercises_Exercises_ExerciseId",
-                        column: x => x.ExerciseId,
-                        principalTable: "Exercises",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_WorkoutExercises_Workouts_WorkoutId",
                         column: x => x.WorkoutId,
                         principalTable: "Workouts",
                         principalColumn: "Id",
@@ -185,9 +207,14 @@ namespace WorkoutPlanner.MVC.Migrations
                 column: "WorkoutId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Exercises_WorkoutId",
+                name: "IX_Exercises_ProfileId",
                 table: "Exercises",
-                column: "WorkoutId");
+                column: "ProfileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Programs_ProfileId",
+                table: "Programs",
+                column: "ProfileId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProgramRatings_ProgramId",
@@ -195,14 +222,25 @@ namespace WorkoutPlanner.MVC.Migrations
                 column: "ProgramId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Workouts_ProfileId",
+                table: "Workouts",
+                column: "ProfileId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WorkoutPlans_ProgramId",
                 table: "WorkoutPlans",
-                column: "ProgramId");
+                column: "ProgramId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkoutPlans_WorkoutId",
                 table: "WorkoutPlans",
                 column: "WorkoutId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkoutRatings_ProfileId",
+                table: "WorkoutRatings",
+                column: "ProfileId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkoutRatings_WorkoutId",
@@ -214,9 +252,6 @@ namespace WorkoutPlanner.MVC.Migrations
         {
             migrationBuilder.DropTable(
                 name: "WorkoutExercises");
-
-            migrationBuilder.DropTable(
-                name: "Profiles");
 
             migrationBuilder.DropTable(
                 name: "ProgramRatings");
@@ -235,6 +270,9 @@ namespace WorkoutPlanner.MVC.Migrations
 
             migrationBuilder.DropTable(
                 name: "Workouts");
+
+            migrationBuilder.DropTable(
+                name: "Profiles");
         }
     }
 }

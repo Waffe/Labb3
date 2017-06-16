@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WorkoutPlanner.MVC.Models
+namespace WorkoutPlanner.Data.Entities
 {
     public class WorkoutPlan
     {

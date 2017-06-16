@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WorkoutPlanner.Data.Data;
+using WorkoutPlanner.Data.Entities;
 using WorkoutPlanner.MVC.Data;
 using WorkoutPlanner.MVC.Models;
 using WorkoutPlanner.MVC.Models.AccountViewModels;
@@ -118,14 +120,15 @@ namespace WorkoutPlanner.MVC.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var profile = new Profile();
+                _context.Profiles.Add(profile);
+                _context.SaveChanges();
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, ProfileId = profile.Id};
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    var id = user.Id;
-                    var profile = new Profile(id);
-                    _context.Profiles.Add(profile);
-                    _context.SaveChanges();
+
+                 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
                     // Send an email with this link
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

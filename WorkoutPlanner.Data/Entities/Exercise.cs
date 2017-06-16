@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using WorkoutPlanner.MVC.Models.EfManyToMany;
+using WorkoutPlanner.Data.Entities.EfManyToMany;
 
-namespace WorkoutPlanner.MVC.Models
+namespace WorkoutPlanner.Data.Entities
 {
     public class Exercise
     {

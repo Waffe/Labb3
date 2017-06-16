@@ -11,9 +11,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using WorkoutPlanner.Data.Data;
+using WorkoutPlanner.Data.Entities;
+using WorkoutPlanner.Data.Entities.EfManyToMany;
 using WorkoutPlanner.MVC.Data;
 using WorkoutPlanner.MVC.Models;
-using WorkoutPlanner.MVC.Models.EfManyToMany;
 using WorkoutPlanner.MVC.Models.WorkoutViewModels;
 
 namespace WorkoutPlanner.MVC.Controllers
@@ -82,8 +84,8 @@ namespace WorkoutPlanner.MVC.Controllers
         {
             var testwork = workout;
 
-            var currentAppuserId = (await GetCurrentUserAsync()).Id;
-            testwork.Profile = _context.Profiles.FirstOrDefault(x => x.ApplicationUserId == currentAppuserId);
+            var currentAppuserId = (await GetCurrentUserAsync()).ProfileId;
+            testwork.Profile = _context.Profiles.FirstOrDefault(x => x.Id == currentAppuserId);
             if (ModelState.IsValid)
             {
                 _context.Workouts.Add(testwork);

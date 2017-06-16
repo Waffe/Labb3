@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using WorkoutPlanner.MVC.Models;
-using WorkoutPlanner.MVC.Models.EfManyToMany;
+﻿using Microsoft.EntityFrameworkCore;
+using WorkoutPlanner.Data.Entities;
+using WorkoutPlanner.Data.Entities.EfManyToMany;
 
-
-namespace WorkoutPlanner.MVC.Data
+namespace WorkoutPlanner.Data.Data
 {
     public interface IWorkoutPlannerContext
     {
@@ -13,7 +11,7 @@ namespace WorkoutPlanner.MVC.Data
         DbSet<Workout> Workouts { get; set; }
         DbSet<WorkoutPlan> WorkoutPlans { get; set; }
         DbSet<Profile> Profiles { get; set; }
-        DbSet<Models.Program> Programs { get; set; }
+        DbSet<Program> Programs { get; set; }
         DbSet<ProgramRating> ProgramRatings { get; set; }
     }
 
@@ -26,7 +24,7 @@ namespace WorkoutPlanner.MVC.Data
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<WorkoutPlan> WorkoutPlans { get; set; }
         public DbSet<Profile> Profiles { get; set; }
-        public DbSet<Models.Program> Programs { get; set; }
+        public DbSet<Program> Programs { get; set; }
         public DbSet<ProgramRating> ProgramRatings { get; set; }
 
 
@@ -39,18 +37,11 @@ namespace WorkoutPlanner.MVC.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<WorkoutExercises>().HasKey(sb => new {sb.ExerciseId, sb.WorkoutId});
-            modelBuilder.Entity<Models.Program>().HasKey(x => x.Id);
+            modelBuilder.Entity<Program>().HasKey(x => x.Id);
 
             modelBuilder.Entity<ProgramRating>().HasAlternateKey(wr => new {wr.ProfileId, wr.ProgramId })
                 .HasName("U_ProgramRating_ProgAuthor");
-
-
-            modelBuilder.Ignore<IdentityUserLogin<string>>();
-            modelBuilder.Ignore<IdentityUserRole<string>>();
-            modelBuilder.Ignore<IdentityUserClaim<string>>();
-            modelBuilder.Ignore<IdentityUserToken<string>>();
-            modelBuilder.Ignore<IdentityUser<string>>();
-            modelBuilder.Ignore<ApplicationUser>();
+           
         }
     }
 }

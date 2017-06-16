@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using WorkoutPlanner.MVC.Data;
-using WorkoutPlanner.MVC.Models;
+using WorkoutPlanner.Data.Data;
+using WorkoutPlanner.Data.Entities;
 
-namespace WorkoutPlanner.MVC.Migrations
+namespace WorkoutPlanner.Data.Migrations
 {
     [DbContext(typeof(WorkoutPlannerContext))]
-    [Migration("20170519171236_IHadToImSorry")]
-    partial class IHadToImSorry
+    [Migration("20170616084229_MovedDomainToDataLayer")]
+    partial class MovedDomainToDataLayer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,7 +18,7 @@ namespace WorkoutPlanner.MVC.Migrations
                 .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.EfManyToMany.WorkoutExercises", b =>
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.EfManyToMany.WorkoutExercises", b =>
                 {
                     b.Property<int>("ExerciseId");
 
@@ -31,35 +31,31 @@ namespace WorkoutPlanner.MVC.Migrations
                     b.ToTable("WorkoutExercises");
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.Exercise", b =>
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.Exercise", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ApplicationUserId");
 
                     b.Property<string>("Instructions");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("Video");
+                    b.Property<int?>("ProfileId");
 
-                    b.Property<int?>("WorkoutId");
+                    b.Property<string>("Video");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WorkoutId");
+                    b.HasIndex("ProfileId");
 
                     b.ToTable("Exercises");
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.Profile", b =>
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.Profile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ApplicationUserId");
 
                     b.Property<DateTime>("DateOfBirth");
 
@@ -74,12 +70,10 @@ namespace WorkoutPlanner.MVC.Migrations
                     b.ToTable("Profiles");
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.Program", b =>
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.Program", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("AuthorId");
 
                     b.Property<string>("Description");
 
@@ -87,20 +81,24 @@ namespace WorkoutPlanner.MVC.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int?>("ProfileId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProfileId");
 
                     b.ToTable("Programs");
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.ProgramRating", b =>
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.ProgramRating", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired();
-
                     b.Property<string>("Comment");
+
+                    b.Property<int?>("ProfileId")
+                        .IsRequired();
 
                     b.Property<int>("ProgramId");
 
@@ -108,7 +106,7 @@ namespace WorkoutPlanner.MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("AuthorId", "ProgramId")
+                    b.HasAlternateKey("ProfileId", "ProgramId")
                         .HasName("U_ProgramRating_ProgAuthor");
 
                     b.HasIndex("ProgramId");
@@ -116,19 +114,23 @@ namespace WorkoutPlanner.MVC.Migrations
                     b.ToTable("ProgramRatings");
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.Workout", b =>
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.Workout", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ApplicationUserId");
+                    b.Property<string>("Name");
+
+                    b.Property<int?>("ProfileId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProfileId");
 
                     b.ToTable("Workouts");
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.WorkoutPlan", b =>
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.WorkoutPlan", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -149,22 +151,22 @@ namespace WorkoutPlanner.MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProgramId");
+                    b.HasIndex("ProgramId")
+                        .IsUnique();
 
                     b.HasIndex("WorkoutId");
 
                     b.ToTable("WorkoutPlans");
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.WorkoutRating", b =>
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.WorkoutRating", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired();
-
                     b.Property<string>("Comment");
+
+                    b.Property<int?>("ProfileId");
 
                     b.Property<int>("Rate");
 
@@ -172,58 +174,80 @@ namespace WorkoutPlanner.MVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("AuthorId", "WorkoutId")
-                        .HasName("U_WorkoutRating_WorkAuthor");
+                    b.HasIndex("ProfileId");
 
                     b.HasIndex("WorkoutId");
 
                     b.ToTable("WorkoutRatings");
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.EfManyToMany.WorkoutExercises", b =>
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.EfManyToMany.WorkoutExercises", b =>
                 {
-                    b.HasOne("WorkoutPlanner.MVC.Models.Exercise", "Exercise")
-                        .WithMany()
+                    b.HasOne("WorkoutPlanner.Data.Entities.Exercise", "Exercise")
+                        .WithMany("Workouts")
                         .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("WorkoutPlanner.MVC.Models.Workout", "Workout")
-                        .WithMany()
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.Exercise", b =>
-                {
-                    b.HasOne("WorkoutPlanner.MVC.Models.Workout")
+                    b.HasOne("WorkoutPlanner.Data.Entities.Workout", "Workout")
                         .WithMany("Exercises")
-                        .HasForeignKey("WorkoutId");
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.ProgramRating", b =>
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.Exercise", b =>
                 {
-                    b.HasOne("WorkoutPlanner.MVC.Models.Program", "Program")
+                    b.HasOne("WorkoutPlanner.Data.Entities.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId");
+                });
+
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.Program", b =>
+                {
+                    b.HasOne("WorkoutPlanner.Data.Entities.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId");
+                });
+
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.ProgramRating", b =>
+                {
+                    b.HasOne("WorkoutPlanner.Data.Entities.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WorkoutPlanner.Data.Entities.Program", "Program")
                         .WithMany()
                         .HasForeignKey("ProgramId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.WorkoutPlan", b =>
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.Workout", b =>
                 {
-                    b.HasOne("WorkoutPlanner.MVC.Models.Program", "Program")
-                        .WithMany("WorkoutPlans")
-                        .HasForeignKey("ProgramId")
+                    b.HasOne("WorkoutPlanner.Data.Entities.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId");
+                });
+
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.WorkoutPlan", b =>
+                {
+                    b.HasOne("WorkoutPlanner.Data.Entities.Program", "Program")
+                        .WithOne("WorkoutPlan")
+                        .HasForeignKey("WorkoutPlanner.Data.Entities.WorkoutPlan", "ProgramId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("WorkoutPlanner.MVC.Models.Workout", "Workout")
+                    b.HasOne("WorkoutPlanner.Data.Entities.Workout", "Workout")
                         .WithMany()
                         .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.MVC.Models.WorkoutRating", b =>
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.WorkoutRating", b =>
                 {
-                    b.HasOne("WorkoutPlanner.MVC.Models.Workout", "Workout")
+                    b.HasOne("WorkoutPlanner.Data.Entities.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId");
+
+                    b.HasOne("WorkoutPlanner.Data.Entities.Workout", "Workout")
                         .WithMany()
                         .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Cascade);

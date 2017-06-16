@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WorkoutPlanner.MVC.Models
+namespace WorkoutPlanner.Data.Entities
 {
     public class Program
     {        

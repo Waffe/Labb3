@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using WorkoutPlanner.MVC.Data;
 using WorkoutPlanner.MVC.Models;
 using Microsoft.AspNetCore.Identity;
+using WorkoutPlanner.Data.Data;
+using WorkoutPlanner.Data.Entities;
 
 namespace WorkoutPlanner.MVC.Controllers
 {
@@ -50,14 +52,14 @@ namespace WorkoutPlanner.MVC.Controllers
         public async Task<IActionResult> Detailss()
         {
             var user = await GetCurrentUserAsync();
-            var id = user?.Id;
+            var id = user?.ProfileId;
             if (id == null)
             {
                 return NotFound();
             }
 
             var profile = await _context.Profiles
-                .SingleOrDefaultAsync(m => m.ApplicationUserId == id);
+                .SingleOrDefaultAsync(m => m.Id == id);
             if (profile == null)
             {
                 return NotFound();
@@ -92,13 +94,13 @@ namespace WorkoutPlanner.MVC.Controllers
         public async Task<IActionResult> Edit()
         {
             var user = await GetCurrentUserAsync();
-            var id = user?.Id;
+            var id = user?.ProfileId;
             if (id == null)
             {
                 return NotFound();
             }
 
-            var profile = await _context.Profiles.SingleOrDefaultAsync(m => m.ApplicationUserId == id);
+            var profile = await _context.Profiles.SingleOrDefaultAsync(m => m.Id == id);
             if (profile == null)
             {
                 return NotFound();

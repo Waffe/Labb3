@@ -1,4 +1,4 @@
-﻿namespace WorkoutPlanner.MVC.Models
+﻿namespace WorkoutPlanner.Data.Entities
 {
     public class ProgramRating
     {

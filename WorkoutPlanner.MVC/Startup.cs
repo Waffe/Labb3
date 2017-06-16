@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WorkoutPlanner.Data.Data;
 using WorkoutPlanner.MVC.Data;
 using WorkoutPlanner.MVC.Models;
 using WorkoutPlanner.MVC.Services;

@@ -1,4 +1,4 @@
-﻿namespace WorkoutPlanner.MVC.Models.EfManyToMany
+﻿namespace WorkoutPlanner.Data.Entities.EfManyToMany
 {
     public class WorkoutExercises
     {

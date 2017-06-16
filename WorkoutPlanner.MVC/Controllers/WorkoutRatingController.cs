@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using WorkoutPlanner.Data.Data;
+using WorkoutPlanner.Data.Entities;
 using WorkoutPlanner.MVC.Data;
 using WorkoutPlanner.MVC.Models;
 
@@ -69,8 +71,8 @@ namespace WorkoutPlanner.MVC.Controllers
             {
                 if (await GetCurrentUserAsync() != null)
                 {
-                    var currentAppUserId = (await GetCurrentUserAsync()).Id;
-                    workoutRating.Profile = _context.Profiles.FirstOrDefault(x=>x.ApplicationUserId == currentAppUserId);
+                    var currentAppUserId = (await GetCurrentUserAsync()).ProfileId;
+                    workoutRating.Profile = _context.Profiles.FirstOrDefault(x=>x.Id == currentAppUserId);
                 }
                 _context.Add(workoutRating);
                 await _context.SaveChangesAsync();

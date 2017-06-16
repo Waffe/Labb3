@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using WorkoutPlanner.MVC.Models.EfManyToMany;
+using WorkoutPlanner.Data.Entities;
+using WorkoutPlanner.Data.Entities.EfManyToMany;
 
 namespace WorkoutPlanner.MVC.Models.WorkoutViewModels
 {

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using WorkoutPlanner.Data.Data;
+using WorkoutPlanner.Data.Entities;
 using WorkoutPlanner.MVC.Data;
 using WorkoutPlanner.MVC.Models;
 
@@ -40,7 +42,7 @@ namespace WorkoutPlanner.MVC.Controllers
                 return NotFound();
             }
 
-            var exercise = await _context.Exercises
+            var exercise = await _context.Exercises.Include(e=>e.Profile)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (exercise == null)
             {
@@ -72,8 +74,8 @@ namespace WorkoutPlanner.MVC.Controllers
             {
                 if (await GetCurrentUserAsync() != null)
                 {
-                    var currentAppuserId = (await GetCurrentUserAsync()).Id;
-                    exercise.Profile = _context.Profiles.FirstOrDefault(x => x.ApplicationUserId == currentAppuserId);
+                    var currentAppuserId = (await GetCurrentUserAsync()).ProfileId;
+                    exercise.Profile = _context.Profiles.FirstOrDefault(x => x.Id == currentAppuserId);
                 }
                 _context.Add(exercise);
                 await _context.SaveChangesAsync();
