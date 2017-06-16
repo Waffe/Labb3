@@ -197,7 +197,7 @@ namespace WorkoutPlanner.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddExercise(int workoutId, int exerciseId)
+        public IActionResult AddExercise(int workoutId, int exerciseId, int reps, int sets, int? minutes, string weight)
         {
 
             using (var apa = _context)
@@ -205,16 +205,32 @@ namespace WorkoutPlanner.MVC.Controllers
                 var workoutToBeUpdated = apa.Workouts.Include(x=>x.Exercises).ThenInclude(x=>x.Exercise).FirstOrDefault(x => x.Id == workoutId);
                 var workout = apa.Workouts.FirstOrDefault(x => x.Id == workoutId);
                 var exercise = apa.Exercises.FirstOrDefault(x => x.Id == exerciseId);
-                var workoutExercise = new WorkoutExercises() { Workout=workout, Exercise = exercise,WorkoutId = workout.Id,ExerciseId = exercise.Id};
-                if (!workoutToBeUpdated.Exercises.Any(x=>x.WorkoutId == workoutExercise.WorkoutId && x.ExerciseId == workoutExercise.ExerciseId))
+                var workoutExercise = new WorkoutExercises();
+                if (minutes < 1)
                 {
-                    workoutToBeUpdated.Exercises.Add(workoutExercise);
-                    apa.Update(workoutToBeUpdated);
-                    apa.SaveChanges();
+                    workoutExercise = new WorkoutExercises() { Workout = workout, Exercise = exercise, WorkoutId = workout.Id, ExerciseId = exercise.Id, Sets = sets, Reps = reps, Weight = weight };
                 }
+                else
+                {
+                    workoutExercise = new WorkoutExercises() { Workout = workout, Exercise = exercise, WorkoutId = workout.Id, ExerciseId = exercise.Id, Sets = sets, Reps = reps, Minutes = minutes, Weight = weight };
+                }
+
+
+                workoutToBeUpdated.Exercises.Add(workoutExercise);
+                apa.Update(workoutToBeUpdated);
+                apa.SaveChanges();
+
             }
 
             return RedirectToAction("Edit",new {id = workoutId});
+        }
+
+        public async Task<IActionResult> DeleteWorkoutExercise(int id, int workoutid)
+        {
+            var workout = await _context.WorkoutExercises.SingleOrDefaultAsync(m => m.Id == id);
+            _context.WorkoutExercises.Remove(workout);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Edit", new { id = workoutid });
         }
     }
 }

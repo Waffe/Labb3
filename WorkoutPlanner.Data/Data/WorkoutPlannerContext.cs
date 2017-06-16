@@ -36,7 +36,6 @@ namespace WorkoutPlanner.Data.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<WorkoutExercises>().HasKey(sb => new {sb.ExerciseId, sb.WorkoutId});
             modelBuilder.Entity<Program>().HasKey(x => x.Id);
 
             modelBuilder.Entity<ProgramRating>().HasAlternateKey(wr => new {wr.ProfileId, wr.ProgramId })

@@ -9,9 +9,10 @@ using WorkoutPlanner.Data.Entities;
 namespace WorkoutPlanner.Data.Migrations
 {
     [DbContext(typeof(WorkoutPlannerContext))]
-    partial class WorkoutPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20170616095742_changedworkoutexercisesmore")]
+    partial class changedworkoutexercisesmore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -19,10 +20,9 @@ namespace WorkoutPlanner.Data.Migrations
 
             modelBuilder.Entity("WorkoutPlanner.Data.Entities.EfManyToMany.WorkoutExercises", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<int>("ExerciseId");
+
+                    b.Property<int>("WorkoutId");
 
                     b.Property<int?>("Minutes");
 
@@ -32,11 +32,7 @@ namespace WorkoutPlanner.Data.Migrations
 
                     b.Property<string>("Weight");
 
-                    b.Property<int>("WorkoutId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExerciseId");
+                    b.HasKey("ExerciseId", "WorkoutId");
 
                     b.HasIndex("WorkoutId");
 

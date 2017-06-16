@@ -27,21 +27,45 @@
 </div>
 <table class="table">
     <thead>
-    <tr>
-        <th>
-            <p>Exercises</p>
-        </th>
-    </tr>
+        <tr>
+            <th>
+                <p>Exercises</p>
+            </th>
+            <th>
+                <p>Weight</p>
+            </th>
+            <th>
+                <p>Reps</p>
+            </th>
+            <th>
+                <p>Sets</p>
+            </th>
+            <th>
+                <p>Minutes</p>
+            </th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model.Exercises)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Exercise.Name)
-            </td>
-        </tr>
-    }
+        @foreach (var item in Model.Exercises)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Exercise.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Weight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reps)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sets)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Minutes)
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 <div>

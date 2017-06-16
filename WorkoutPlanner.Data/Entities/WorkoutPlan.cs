@@ -15,8 +15,6 @@ namespace WorkoutPlanner.Data.Entities
         public Workout Workout { get; set; }
         public int Week { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
-        public int? Minutes { get; set; }
-        public int Reps { get; set; }
-        public int Sets { get; set; }
+
     }
 }
