@@ -1,0 +1,49 @@
+@model WorkoutPlanner.MVC.Models.Workout
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Workout</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Profile.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Profile.Name)
+        </dd>
+    </dl>
+</div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            <p>Exercises</p>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Exercises)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Exercise.Name)
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
