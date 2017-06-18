@@ -38,7 +38,10 @@
                 @Html.DisplayFor(modelItem => item.Instructions)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Video)
+                @if (!string.IsNullOrEmpty(item.Video))
+                {
+                    <a href="@item.Video" target="_blank">Instructional Video</a>
+                }                
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Profile.Name)

@@ -120,7 +120,7 @@ namespace WorkoutPlanner.MVC.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var profile = new Profile();
+                var profile = new Profile(){RegistrationDate = DateTime.Now};
                 _context.Profiles.Add(profile);
                 _context.SaveChanges();
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, ProfileId = profile.Id};
