@@ -1,5 +1,5 @@
 @using WorkoutPlanner.Data.Entities
-@model WorkoutPlanner.Data.Entities.Workout
+@model WorkoutPlanner.MVC.Models.AuthProfileViewModels.WorkoutAuthViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -12,16 +12,16 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Workout.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Workout.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Profile.Name)
+            Workout created by:
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Profile.Name)
+            <a asp-controller="Profiles" asp-action="Details" asp-route-id="@Model.Workout.ProfileId">@Html.DisplayFor(model => model.Workout.Profile.Name)</a>
         </dd>
     </dl>
 </div>
@@ -46,7 +46,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Exercises)
+        @foreach (var item in Model.Workout.Exercises)
         {
             <tr>
                 <td>
@@ -69,6 +69,9 @@
     </tbody>
 </table>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (Model.IsAuthor)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Workout.Id">Edit</a>
+    }    
+    <a asp-action="Index">All workouts</a>
 </div>

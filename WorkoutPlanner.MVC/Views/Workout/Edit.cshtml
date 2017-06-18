@@ -13,18 +13,12 @@
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ProfileId"/>
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="ProfileId" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="ProfileId" class="form-control" />
-                <span asp-validation-for="ProfileId" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
@@ -84,11 +78,6 @@
     
     @{var exerciseId = 0;}
 
-    @*<select asp-for="@exerciseId" asp-items="@(new SelectList(ViewBag.Exercises, "Id", "Name"))"></select>
-    <input name="reps" class="form-control" style="width: 60px;"/>
-    <input name="sets" class="form-control" style="width: 60px;"/>
-    <input name="minutes" class="form-control" style="width: 60px;"/>
-    <input name="weight" class="form-control"/>*@
     <div class="form-horizontal">
         <div class="form-group">
             <label class="col-md-2 control-label">Exercise</label>

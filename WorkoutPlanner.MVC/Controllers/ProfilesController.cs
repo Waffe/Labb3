@@ -10,6 +10,7 @@ using WorkoutPlanner.MVC.Models;
 using Microsoft.AspNetCore.Identity;
 using WorkoutPlanner.Data.Data;
 using WorkoutPlanner.Data.Entities;
+using WorkoutPlanner.MVC.Models.AuthProfileViewModels;
 
 namespace WorkoutPlanner.MVC.Controllers
 {
@@ -33,19 +34,31 @@ namespace WorkoutPlanner.MVC.Controllers
         // GET: Profiles/Details/5  //// Delete this after labb2
         public async Task<IActionResult> Details(int? id)
         {
+            var user = await GetCurrentUserAsync() ?? new ApplicationUser();
+
             if (id == null)
             {
                 return NotFound();
             }
 
+
             var profile = await _context.Profiles
                 .SingleOrDefaultAsync(m => m.Id == id);
+
             if (profile == null)
             {
                 return NotFound();
             }
 
-            return View(profile);
+            var profileViewModel = new ProfileAuthViewModel
+            {
+                Profile = profile,
+                IsAuthor = user.ProfileId == id,
+                Workouts = _context.Workouts.Where(w=>w.ProfileId == id)
+            };
+
+
+            return View(profileViewModel);
         }
 
         //REAL DETAILS - How its supposed to work

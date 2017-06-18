@@ -16,6 +16,7 @@ using WorkoutPlanner.Data.Entities;
 using WorkoutPlanner.Data.Entities.EfManyToMany;
 using WorkoutPlanner.MVC.Data;
 using WorkoutPlanner.MVC.Models;
+using WorkoutPlanner.MVC.Models.AuthProfileViewModels;
 using WorkoutPlanner.MVC.Models.WorkoutViewModels;
 
 namespace WorkoutPlanner.MVC.Controllers
@@ -38,10 +39,17 @@ namespace WorkoutPlanner.MVC.Controllers
         // GET: Workout
         public async Task<IActionResult> Index()
         {
+            var user = await GetCurrentUserAsync();
             var listOfWorkouts = await _context.Workouts.Include(x=>x.Profile).ToListAsync();
+            var listOfWorkoutViewmodels = new List<WorkoutAuthViewModel>();
+            if(user == null) user = new ApplicationUser();
+            foreach (var workout in listOfWorkouts)
+            {
+                listOfWorkoutViewmodels.Add(new WorkoutAuthViewModel(){Workout = workout,  IsAuthor = user.ProfileId == workout.ProfileId, });
+            }
 
                 
-            return View(listOfWorkouts);
+            return View(listOfWorkoutViewmodels);
         }
 
         // GET: Workout/Details/5
@@ -52,17 +60,25 @@ namespace WorkoutPlanner.MVC.Controllers
                 return NotFound();
             }
 
-
+            var user = await GetCurrentUserAsync() ?? new ApplicationUser();
 
             var workout = await _context.Workouts.Include(x=>x.Profile).Include(x=>x.Exercises).ThenInclude(x=>x.Exercise)
                 .SingleOrDefaultAsync(m => m.Id == id);
+
+
 
             if (workout == null)
             {
                 return NotFound();
             }
 
-            return View(workout);
+            var workoutViewModel = new WorkoutAuthViewModel()
+            {
+                Workout = workout,
+                IsAuthor = user.ProfileId == workout.ProfileId
+            };
+
+            return View(workoutViewModel);
         }
 
         // GET: Workout/Create

@@ -1,9 +1,11 @@
 @using WorkoutPlanner.Data.Entities
-@model WorkoutPlanner.Data.Entities.Profile
+@model WorkoutPlanner.MVC.Models.AuthProfileViewModels.ProfileAuthViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
+
+
 
 <h2>Details</h2>
 
@@ -12,32 +14,60 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Profile.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Profile.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
+            @Html.DisplayNameFor(model => model.Profile.DateOfBirth)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DateOfBirth)
+            @Html.DisplayFor(model => model.Profile.DateOfBirth)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Weight)
+            @Html.DisplayNameFor(model => model.Profile.Weight)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Weight)
+            @Html.DisplayFor(model => model.Profile.Weight)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Lenght)
+            @Html.DisplayNameFor(model => model.Profile.Lenght)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Lenght)
+            @Html.DisplayFor(model => model.Profile.Lenght)
         </dd>
     </dl>
 </div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Workout
+        </th>
+        <th>
+            Details
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Workouts) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <a asp-controller="Workout" asp-action="Details" asp-route-id="@item.Id">Go to workout</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    @if (Model.IsAuthor)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Profile.Id">Edit |</a>
+    }
+    
     <a asp-action="Index">Back to List</a>
 </div>
