@@ -221,7 +221,7 @@ namespace WorkoutPlanner.MVC.Controllers
                 var workoutToBeUpdated = apa.Workouts.Include(x=>x.Exercises).ThenInclude(x=>x.Exercise).FirstOrDefault(x => x.Id == workoutId);
                 var workout = apa.Workouts.FirstOrDefault(x => x.Id == workoutId);
                 var exercise = apa.Exercises.FirstOrDefault(x => x.Id == exerciseId);
-                var workoutExercise = new WorkoutExercises();
+                WorkoutExercises workoutExercise;
                 if (minutes < 1)
                 {
                     workoutExercise = new WorkoutExercises() { Workout = workout, Exercise = exercise, WorkoutId = workout.Id, ExerciseId = exercise.Id, Sets = sets, Reps = reps, Weight = weight };

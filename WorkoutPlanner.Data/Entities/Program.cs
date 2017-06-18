@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using WorkoutPlanner.Data.Entities.EfManyToMany;
 
 namespace WorkoutPlanner.Data.Entities
 {
@@ -11,6 +13,6 @@ namespace WorkoutPlanner.Data.Entities
         public Difficulty Difficulty { get; set; }
         public int? ProfileId { get; set; }
         public Profile Profile { get; set; }
-        public WorkoutPlan WorkoutPlan { get; set; }
+        public ICollection<WorkoutPlan> WorkoutPlans { get; set; }
     }
 }

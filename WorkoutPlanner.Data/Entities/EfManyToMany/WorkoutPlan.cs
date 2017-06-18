@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WorkoutPlanner.Data.Entities
+namespace WorkoutPlanner.Data.Entities.EfManyToMany
 {
     public class WorkoutPlan
     {

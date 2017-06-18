@@ -9,9 +9,10 @@ using WorkoutPlanner.Data.Entities;
 namespace WorkoutPlanner.Data.Migrations
 {
     [DbContext(typeof(WorkoutPlannerContext))]
-    partial class WorkoutPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20170618171505_ChangedProgramToHaveICollectionOfPlans")]
+    partial class ChangedProgramToHaveICollectionOfPlans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -41,32 +42,6 @@ namespace WorkoutPlanner.Data.Migrations
                     b.HasIndex("WorkoutId");
 
                     b.ToTable("WorkoutExercises");
-                });
-
-            modelBuilder.Entity("WorkoutPlanner.Data.Entities.EfManyToMany.WorkoutPlan", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("DayOfWeek");
-
-                    b.Property<int?>("ExerciseId");
-
-                    b.Property<int>("ProgramId");
-
-                    b.Property<int>("Week");
-
-                    b.Property<int>("WorkoutId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExerciseId");
-
-                    b.HasIndex("ProgramId");
-
-                    b.HasIndex("WorkoutId");
-
-                    b.ToTable("WorkoutPlans");
                 });
 
             modelBuilder.Entity("WorkoutPlanner.Data.Entities.Exercise", b =>
@@ -192,6 +167,28 @@ namespace WorkoutPlanner.Data.Migrations
                     b.ToTable("Workouts");
                 });
 
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.WorkoutPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("DayOfWeek");
+
+                    b.Property<int>("ProgramId");
+
+                    b.Property<int>("Week");
+
+                    b.Property<int>("WorkoutId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProgramId");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.ToTable("WorkoutPlans");
+                });
+
             modelBuilder.Entity("WorkoutPlanner.Data.Entities.WorkoutRating", b =>
                 {
                     b.Property<int>("Id")
@@ -223,23 +220,6 @@ namespace WorkoutPlanner.Data.Migrations
 
                     b.HasOne("WorkoutPlanner.Data.Entities.Workout", "Workout")
                         .WithMany("Exercises")
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WorkoutPlanner.Data.Entities.EfManyToMany.WorkoutPlan", b =>
-                {
-                    b.HasOne("WorkoutPlanner.Data.Entities.Exercise")
-                        .WithMany("WorkoutPlans")
-                        .HasForeignKey("ExerciseId");
-
-                    b.HasOne("WorkoutPlanner.Data.Entities.Program", "Program")
-                        .WithMany("WorkoutPlans")
-                        .HasForeignKey("ProgramId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WorkoutPlanner.Data.Entities.Workout", "Workout")
-                        .WithMany()
                         .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -288,6 +268,19 @@ namespace WorkoutPlanner.Data.Migrations
                     b.HasOne("WorkoutPlanner.Data.Entities.Profile", "Profile")
                         .WithMany()
                         .HasForeignKey("ProfileId");
+                });
+
+            modelBuilder.Entity("WorkoutPlanner.Data.Entities.WorkoutPlan", b =>
+                {
+                    b.HasOne("WorkoutPlanner.Data.Entities.Program", "Program")
+                        .WithMany("WorkoutPlans")
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WorkoutPlanner.Data.Entities.Workout", "Workout")
+                        .WithMany()
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WorkoutPlanner.Data.Entities.WorkoutRating", b =>

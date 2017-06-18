@@ -20,5 +20,6 @@ namespace WorkoutPlanner.Data.Entities
         public int? ProfileId { get; set; }
         public Profile Profile { get; set; }
         public ICollection<WorkoutExercises> Workouts { get; set; }
+        public ICollection<WorkoutPlan> WorkoutPlans { get; set; }
     }
 }

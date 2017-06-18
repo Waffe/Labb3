@@ -125,9 +125,9 @@ namespace WorkoutPlanner.MVC.Controllers
 
                 var profile = new Profile() { RegistrationDate = DateTime.Now };
  
-                    _context.Profiles.Add(profile);
-                    _context.SaveChanges();
-                    id = profile.Id;
+                _context.Profiles.Add(profile);
+                _context.SaveChanges();
+                id = profile.Id;
 
                 
                 

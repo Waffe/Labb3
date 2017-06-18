@@ -23,7 +23,7 @@
             @Html.DisplayNameFor(model => model.Profile.DateOfBirth)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Profile.DateOfBirth)
+            @Model.Profile.DateOfBirth.ToString("d")
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Profile.Weight)
