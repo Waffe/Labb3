@@ -10,6 +10,7 @@ using WorkoutPlanner.Data.Data;
 using WorkoutPlanner.Data.Entities;
 using WorkoutPlanner.MVC.Data;
 using WorkoutPlanner.MVC.Models;
+using WorkoutPlanner.MVC.Models.AuthProfileViewModels;
 
 namespace WorkoutPlanner.MVC.Controllers
 {
@@ -30,8 +31,15 @@ namespace WorkoutPlanner.MVC.Controllers
         // GET: Exercise
         public async Task<IActionResult> Index()
         {
-            var apa = await _context.Exercises.Include(e => e.Workouts).Include(x=>x.Profile).ToListAsync();
-            return View(apa);
+            var user = await GetCurrentUserAsync() ?? new ApplicationUser();
+            var listOfExercises = await _context.Exercises.Include(e => e.Workouts).Include(x => x.Profile).ToListAsync();
+            var listOfExerciseViewmodels = new List<ExerciseAuthViewModel>();
+            foreach (var exercise in listOfExercises)
+            {
+                listOfExerciseViewmodels.Add(new ExerciseAuthViewModel() { Exercise = exercise, IsAuthor = user.ProfileId == exercise.ProfileId, });
+            }
+
+            return View(listOfExerciseViewmodels);
         }
 
         // GET: Exercise/Details/5

@@ -1,5 +1,5 @@
 @using WorkoutPlanner.Data.Entities
-@model IEnumerable<WorkoutPlanner.Data.Entities.Exercise>
+@model IEnumerable<WorkoutPlanner.MVC.Models.AuthProfileViewModels.ExerciseAuthViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -14,16 +14,16 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Name)
+                    @Html.DisplayNameFor(model => model.Exercise.Name)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Instructions)
+                    @Html.DisplayNameFor(model => model.Exercise.Instructions)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Video)
+                    @Html.DisplayNameFor(model => model.Exercise.Video)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Profile.Name)
+                    @Html.DisplayNameFor(model => model.Exercise.Profile.Name)
                 </th>
             <th></th>
         </tr>
@@ -32,24 +32,32 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.Exercise.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Instructions)
+                @Html.DisplayFor(modelItem => item.Exercise.Instructions)
             </td>
             <td>
-                @if (!string.IsNullOrEmpty(item.Video))
+                @if (!string.IsNullOrEmpty(item.Exercise.Video))
                 {
-                    <a href="@item.Video" target="_blank">Instructional Video</a>
+                    <a href="@item.Exercise.Video" target="_blank">Instructional Video</a>
                 }                
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Profile.Name)
+                @Html.DisplayFor(modelItem => item.Exercise.Profile.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @if (item.IsAuthor)
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Exercise.Id">Edit |</a> 
+                }
+                
+                <a asp-action="Details" asp-route-id="@item.Exercise.Id">Details</a>
+                @if (item.IsAuthor)
+                {
+                    <a asp-action="Delete" asp-route-id="@item.Exercise.Id">| Delete</a>
+                }
+                
             </td>
         </tr>
 }

@@ -39,10 +39,9 @@ namespace WorkoutPlanner.MVC.Controllers
         // GET: Workout
         public async Task<IActionResult> Index()
         {
-            var user = await GetCurrentUserAsync();
+            var user = await GetCurrentUserAsync() ?? new ApplicationUser();
             var listOfWorkouts = await _context.Workouts.Include(x=>x.Profile).ToListAsync();
             var listOfWorkoutViewmodels = new List<WorkoutAuthViewModel>();
-            if(user == null) user = new ApplicationUser();
             foreach (var workout in listOfWorkouts)
             {
                 listOfWorkoutViewmodels.Add(new WorkoutAuthViewModel(){Workout = workout,  IsAuthor = user.ProfileId == workout.ProfileId, });

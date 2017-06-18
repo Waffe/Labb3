@@ -122,9 +122,9 @@ namespace WorkoutPlanner.MVC.Controllers
             {
                 var profile = new Profile(){RegistrationDate = DateTime.Now};
                 _context.Profiles.Add(profile);
-                _context.SaveChanges();
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, ProfileId = profile.Id};
                 var result = await _userManager.CreateAsync(user, model.Password);
+                _context.SaveChanges();
                 if (result.Succeeded)
                 {
 
