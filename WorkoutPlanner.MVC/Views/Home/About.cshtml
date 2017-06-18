@@ -3,25 +3,3 @@
 }
 <h2>@ViewData["Title"].</h2>
 <h3>@ViewData["Message"]</h3>
-
-<p>Jag började bygga för faktisk funktionalitet, men insåg senare att det uppfyllde inte CRUD för alla relationer.</p>
-
-<p>Denna veckan har varit exremt mycket med sjukhusbesök osv, men jag gjorde funktionalitet för labben,. Crud för 1-1, 1-N och N-M</p>
-
-<p>1-1 hittar du på profiles, dock så har jag här gjort fel med mening då jag har index för detta, vilket jag inte ska ha i den faktiska applicationen, om du tittar i koden för AccountController så skapas en profil up vid account Create, detta för att profile egentligen inte ska kunna tas bort eller skapas, utan bara tittas på och editeras.</p>
-
-
-<p>1-N crud hittar på på WorkoutRatings, här igen är det inte så jag vill att de faktiskt ska presenteras, men de gör sin crud.</p>
-
-
-<p>N-M crud hittar vi på workouts EDIT, då det är mer eller mindre ett helvete att skapa en lista i en vy för att skicka ner till en controller så fick jag göra en fullösning :( </p>
-
-
-<p>Ska ju utveckla vidare den som hobby projekt, så de va kul att komma igång med det och jag har lärt mig otroligt mycket, varasig jag ville eller inte om vissa grejer! :P</p>
-
-<p>Kolla på de tre delarna, då jag inte hann med att göra klart alla controllers för hela domänen</p>
-
-
-<p>Det kan vara så att jag missat något för VG, men tror inte detta. Är det så så kompliterar jag mer än gärna</p>
-
-<p>Struktur i projektet saknas då det var mycket svårt att använda MVC Identity User tillsammans med den separata domänen, om du hade ett data lager, detta pga circular dependancy</p>

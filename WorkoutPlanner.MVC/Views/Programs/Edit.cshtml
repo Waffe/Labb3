@@ -1,3 +1,4 @@
+@using WorkoutPlanner.Data.Entities
 @model WorkoutPlanner.Data.Entities.Program
 
 @{
@@ -11,7 +12,8 @@
         <h4>Program</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ProfileId"/>
         <div class="form-group">
             <label asp-for="Description" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -29,15 +31,8 @@
         <div class="form-group">
             <label asp-for="Difficulty" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Difficulty" class="form-control"></select>
+                <select asp-for="Difficulty" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(Difficulty))"></select>
                 <span asp-validation-for="Difficulty" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="ProfileId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="ProfileId" class="form-control" asp-items="ViewBag.ProfileId"></select>
-                <span asp-validation-for="ProfileId" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
@@ -47,6 +42,73 @@
         </div>
     </div>
 </form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <p>Week</p>
+            </th>
+            <th>
+                <p>Day</p>
+            </th>
+            <th>
+                <p>Workout Name</p>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.WorkoutPlans)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Week)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DayOfWeek)
+                </td>
+                <td>
+                    <a asp-controller="Workout" asp-action="Details" asp-route-id="@item.WorkoutId">@Html.DisplayFor(modelItem => item.Workout.Name)</a>
+                </td>
+                <td>
+                    <a asp-action="DeleteWorkoutplan" asp-route-id="@item.Id" asp-route-programid="@item.ProgramId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form asp-action="AddWorkout" asp-controller="Programs" asp-route-programId="@Model.Id">
+
+    @{var workoutId = 0;}
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">Workout:</label>
+            <div class="col-md-10">
+                <select asp-for="@workoutId" asp-items="@(new SelectList(ViewBag.Workouts, "Id", "Name"))"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Week:</label>
+            <div class="col-md-10">
+                <input name="week" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Day of week:</label>
+            <div class="col-md-10">
+                <select name="dayOfWeek" class="form-control" asp-items="@Html.GetEnumSelectList(typeof(DayOfWeek))"></select>
+            </div>
+        </div>
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Add Exercise" class="btn btn-default" />
+        </div>
+    </div>
+
+
+</form>
+
 
 <div>
     <a asp-action="Index">Back to List</a>

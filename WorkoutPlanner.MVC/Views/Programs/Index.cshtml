@@ -40,7 +40,7 @@
                 @Html.DisplayFor(modelItem => item.Difficulty)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Profile.Id)
+                <a asp-controller="Profiles" asp-action="Details" asp-route-id="@item.ProfileId">@Html.DisplayFor(modelItem => item.Profile.Name)</a>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

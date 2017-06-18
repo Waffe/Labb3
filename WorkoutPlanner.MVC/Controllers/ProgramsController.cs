@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WorkoutPlanner.Data.Data;
 using WorkoutPlanner.Data.Entities;
+using WorkoutPlanner.Data.Entities.EfManyToMany;
 using WorkoutPlanner.MVC.Models;
 
 
@@ -41,13 +42,13 @@ namespace WorkoutPlanner.MVC.Controllers
             }
 
             var program = await _context.Programs
-                .Include(p => p.Profile)
+                .Include(p => p.Profile).Include(x=>x.WorkoutPlans).ThenInclude(x=>x.Workout)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (program == null)
             {
                 return NotFound();
             }
-
+            program.WorkoutPlans = program.WorkoutPlans.OrderBy(x => x.Week).ThenBy(x => x.DayOfWeek).ToList();
             return View(program);
         }
 
@@ -58,6 +59,7 @@ namespace WorkoutPlanner.MVC.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+
             return View();
         }
 
@@ -86,13 +88,16 @@ namespace WorkoutPlanner.MVC.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Workouts = _context.Workouts.ToList();
 
             var program = await _context.Programs.Include(x=>x.WorkoutPlans).SingleOrDefaultAsync(m => m.Id == id);
+            
 
             if (program == null)
             {
                 return NotFound();
             }
+            program.WorkoutPlans = program.WorkoutPlans.OrderBy(x => x.Week).ThenBy(x=>x.DayOfWeek).ToList();
             return View(program);
         }
 
@@ -164,6 +169,37 @@ namespace WorkoutPlanner.MVC.Controllers
         private bool ProgramExists(int id)
         {
             return _context.Programs.Any(e => e.Id == id);
+        }
+
+        [HttpPost]
+        public IActionResult AddWorkout(int workoutId, int programId, int week, DayOfWeek dayOfWeek)
+        {
+
+            using (var apa = _context)
+            {
+                var programToBeUpdated = apa.Programs.Include(x => x.WorkoutPlans).ThenInclude(x => x.Workout).FirstOrDefault(x => x.Id == programId);
+                var workout = apa.Workouts.FirstOrDefault(x => x.Id == workoutId);
+                var program = apa.Programs.FirstOrDefault(x => x.Id == programId);
+
+                var workoutPlan = new WorkoutPlan() { Workout = workout, Program = program, WorkoutId = workout.Id, ProgramId = program.Id, Week = week, DayOfWeek = dayOfWeek };
+
+
+
+                programToBeUpdated.WorkoutPlans.Add(workoutPlan);
+                apa.Update(programToBeUpdated);
+                apa.SaveChanges();
+
+            }
+
+            return RedirectToAction("Edit", new { id = programId });
+        }
+
+        public async Task<IActionResult> DeleteWorkoutplan(int id, int programid)
+        {
+            var workout = await _context.WorkoutPlans.SingleOrDefaultAsync(m => m.Id == id);
+            _context.WorkoutPlans.Remove(workout);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Edit", new { id = programid });
         }
     }
 }

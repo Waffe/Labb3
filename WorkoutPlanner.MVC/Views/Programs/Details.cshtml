@@ -32,10 +32,42 @@
             @Html.DisplayNameFor(model => model.Profile)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Profile.Id)
+            <a asp-controller="Profiles" asp-action="Details" asp-route-id="@Model.ProfileId">@Html.DisplayFor(modelItem => Model.Profile.Name)</a>
         </dd>
     </dl>
 </div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            <p>Week</p>
+        </th>
+        <th>
+            <p>Day</p>
+        </th>
+        <th>
+            <p>Workout Name</p>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.WorkoutPlans)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Week)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DayOfWeek)
+            </td>
+            <td>
+                <a asp-controller="Workout" asp-action="Details" asp-route-id="@item.WorkoutId">@Html.DisplayFor(modelItem => item.Workout.Name)</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
