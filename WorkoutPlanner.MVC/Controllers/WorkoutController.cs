@@ -74,7 +74,8 @@ namespace WorkoutPlanner.MVC.Controllers
             var workoutViewModel = new WorkoutAuthViewModel()
             {
                 Workout = workout,
-                IsAuthor = user.ProfileId == workout.ProfileId
+                IsAuthor = user.ProfileId == workout.ProfileId,
+                WorkoutRatings = _context.WorkoutRatings.Where(wr=>wr.WorkoutId == workout.Id).Include(w=>w.Profile)             
             };
 
             return View(workoutViewModel);

@@ -1,5 +1,5 @@
 @using WorkoutPlanner.Data.Entities
-@model WorkoutPlanner.Data.Entities.Exercise
+@model WorkoutPlanner.MVC.Models.AuthProfileViewModels.ExerciseAuthViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -12,32 +12,39 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Exercise.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Exercise.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Instructions)
+            @Html.DisplayNameFor(model => model.Exercise.Instructions)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Instructions)
+            @Html.DisplayFor(model => model.Exercise.Instructions)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Video)
+            @Html.DisplayNameFor(model => model.Exercise.Video)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Video)
+            @if (!string.IsNullOrEmpty(Model.Exercise.Video))
+            {
+                <a href="@Model.Exercise.Video" target="_blank">Instructional Video</a>
+            }  
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Profile.Name)
+            @Html.DisplayNameFor(model => model.Exercise.Profile.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Profile.Name)
+            <a asp-controller="Profiles" asp-action="Details" asp-route-id="@Model.Exercise.ProfileId">@Html.DisplayFor(model => model.Exercise.Profile.Name)</a>
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (Model.IsAuthor)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Exercise.Id">Edit</a> 
+    }    
+    | <a asp-action="Index">Back to List</a>
+    | <a asp-controller="ExerciseRatings" asp-action="Create">Add Review</a>
 </div>

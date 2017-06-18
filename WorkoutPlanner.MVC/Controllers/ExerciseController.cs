@@ -49,6 +49,7 @@ namespace WorkoutPlanner.MVC.Controllers
             {
                 return NotFound();
             }
+            var user = await GetCurrentUserAsync() ?? new ApplicationUser();
 
             var exercise = await _context.Exercises.Include(e=>e.Profile)
                 .SingleOrDefaultAsync(m => m.Id == id);
@@ -57,7 +58,14 @@ namespace WorkoutPlanner.MVC.Controllers
                 return NotFound();
             }
 
-            return View(exercise);
+            var exerciseViewModel = new ExerciseAuthViewModel()
+            {
+               Exercise = exercise,
+               ExerciseRatings = _context.ExerciseRatings.Where(e=>e.ExerciseId == exercise.Id),
+                IsAuthor = user.ProfileId == exercise.ProfileId
+            };
+
+            return View(exerciseViewModel);
         }
 
         // GET: Exercise/Create

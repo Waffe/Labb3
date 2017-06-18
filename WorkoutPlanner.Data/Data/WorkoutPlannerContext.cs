@@ -26,6 +26,7 @@ namespace WorkoutPlanner.Data.Data
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Program> Programs { get; set; }
         public DbSet<ProgramRating> ProgramRatings { get; set; }
+        public DbSet<ExerciseRating> ExerciseRatings { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

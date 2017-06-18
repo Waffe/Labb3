@@ -44,7 +44,7 @@
                 }                
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Exercise.Profile.Name)
+                <a asp-controller="Profiles" asp-action="Details" asp-route-id="@item.Exercise.ProfileId">@Html.DisplayFor(modelItem => item.Exercise.Profile.Name)</a>               
             </td>
             <td>
                 @if (item.IsAuthor)

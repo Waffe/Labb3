@@ -18,60 +18,106 @@
             @Html.DisplayFor(model => model.Workout.Name)
         </dd>
         <dt>
-            Workout created by:
+            Average Rating:
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AverageRating)
+        </dd>
+        <dt>
+            Created by:
         </dt>
         <dd>
             <a asp-controller="Profiles" asp-action="Details" asp-route-id="@Model.Workout.ProfileId">@Html.DisplayFor(model => model.Workout.Profile.Name)</a>
         </dd>
     </dl>
 </div>
+
+
+<h4>Exercises</h4>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            <p>Exercises</p>
+        </th>
+        <th>
+            <p>Weight</p>
+        </th>
+        <th>
+            <p>Reps</p>
+        </th>
+        <th>
+            <p>Sets</p>
+        </th>
+        <th>
+            <p>Minutes</p>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Workout.Exercises)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Exercise.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Weight)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reps)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sets)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Minutes)
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<h4>Reviews</h4>
 <table class="table">
     <thead>
         <tr>
             <th>
-                <p>Exercises</p>
+                <p>Rating</p>
             </th>
             <th>
-                <p>Weight</p>
+                <p>Comment</p>
             </th>
             <th>
-                <p>Reps</p>
+                <p>From</p>
             </th>
-            <th>
-                <p>Sets</p>
-            </th>
-            <th>
-                <p>Minutes</p>
-            </th>
+
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Workout.Exercises)
+        @foreach (var item in Model.WorkoutRatings)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Exercise.Name)
+                    @Html.DisplayFor(modelItem => item.Rate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Weight)
+                    @Html.DisplayFor(modelItem => item.Comment)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Reps)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sets)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Minutes)
+                    @Html.DisplayFor(modelItem => item.Profile.Name)
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
 <div>
     @if (Model.IsAuthor)
     {
         <a asp-action="Edit" asp-route-id="@Model.Workout.Id">Edit</a>
     }    
-    <a asp-action="Index">All workouts</a>
+    <a asp-action="Index">All workouts</a> |
+    <a asp-controller="WorkoutRating" asp-action="Create">Add Review</a>
 </div>

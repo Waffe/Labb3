@@ -9,9 +9,10 @@ using WorkoutPlanner.Data.Entities;
 namespace WorkoutPlanner.Data.Migrations
 {
     [DbContext(typeof(WorkoutPlannerContext))]
-    partial class WorkoutPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20170618143054_AddedExerciseRating")]
+    partial class AddedExerciseRating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
