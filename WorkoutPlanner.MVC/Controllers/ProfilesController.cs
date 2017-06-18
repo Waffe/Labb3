@@ -92,7 +92,7 @@ namespace WorkoutPlanner.MVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ApplicationUserId,Name,DateOfBirth,Weight,Lenght")] Profile profile)
+        public async Task<IActionResult> Create([Bind("Id,RegistrationDate,Name,DateOfBirth,Weight,Lenght")] Profile profile)
         {
             if (ModelState.IsValid)
             {
@@ -126,7 +126,7 @@ namespace WorkoutPlanner.MVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,Name,DateOfBirth,Weight,Lenght")] Profile profile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,RegistrationDate,Name,DateOfBirth,Weight,Lenght")] Profile profile)
         {
             if (id != profile.Id)
             {
@@ -150,8 +150,7 @@ namespace WorkoutPlanner.MVC.Controllers
                     {
                         throw;
                     }
-                }
-                return RedirectToAction("Detailss");
+                }                
             }
             return View(profile);
         }

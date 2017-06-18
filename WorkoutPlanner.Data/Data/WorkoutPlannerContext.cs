@@ -32,7 +32,7 @@ namespace WorkoutPlanner.Data.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-                "Server = (localdb)\\mssqllocaldb; Database = WorkoutPlanner; Trusted_Connection = True; ");
+                "Server=tcp:labb3.database.windows.net,1433;Initial Catalog=Labb3;Persist Security Info=False;User ID=waffe;Password=Ytg5si6!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

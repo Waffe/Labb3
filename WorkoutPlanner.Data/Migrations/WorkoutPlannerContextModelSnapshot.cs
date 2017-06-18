@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using WorkoutPlanner.Data.Data;
-using WorkoutPlanner.Data.Entities;
 
 namespace WorkoutPlanner.Data.Migrations
 {
